@@ -6,6 +6,7 @@
 import unittest
 import sys
 
+from pathlib import Path
 from subprocess import check_output
 
 from grass.gunittest.case import TestCase
@@ -307,7 +308,7 @@ test_gdal_import_map.0000000104
 test_gdal_import_map.0000000105
 """
 
-        text_from_file = open("map_names_file.txt").read()
+        text_from_file = Path("map_names_file.txt").read_text()
 
         self.assertLooksLike(map_list, text_from_file)
 
