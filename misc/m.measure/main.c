@@ -115,16 +115,31 @@ int main(int argc, char **argv)
     }
 
     /* determine units */
-    if (G_projection() == PROJECTION_LL && !units->answer) {
+    if (units->answer) {
+        int unit = G_units(units->answer);
+
+        units_name = G_get_units_name(unit, 1, 0);
+        sq_units_name = G_get_units_name(unit, 1, 1);
+        f = G_meters_to_units_factor(unit);
+        sq_f = G_meters_to_units_factor_sq(unit);
+    }
+    else if (G_projection() == PROJECTION_LL) {
         units_name = G_get_units_name(U_METERS, 1, 0);
         sq_units_name = G_get_units_name(U_METERS, 1, 1);
+        f = sq_f = 1.0;
     }
     else {
-        units_name = G_get_units_name(G_units(units->answer), 1, 0);
-        sq_units_name = G_get_units_name(G_units(units->answer), 1, 1);
+        /* Convert back to map units with the factor that G_distance() and
+           G_area_of_polygon() use. The unit name of the project can be any
+           text, e.g., "U.S. Surveyor's Foot", which G_units() does not
+           recognize, so it cannot be used to get the factor. */
+        double to_meters = G_database_units_to_meters_factor();
+
+        units_name = G_get_units_name(G_database_unit(), 1, 0);
+        sq_units_name = G_get_units_name(G_database_unit(), 1, 1);
+        f = to_meters > 0.0 ? 1.0 / to_meters : 1.0;
+        sq_f = f * f;
     }
-    f = G_meters_to_units_factor(G_units(units->answer));
-    sq_f = G_meters_to_units_factor_sq(G_units(units->answer));
 
     G_debug(1, "using '%s (%f) %s (%f)'", units_name, f, sq_units_name, sq_f);
 
