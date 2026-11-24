@@ -11,6 +11,14 @@ text with a maximum line length of 78 characters. Any input
 larger than this will be wrapped to the next line.
 All other metadata strings available as standard options are limited to
 79 characters.
+<p>
+The <b>vunit</b> option accepts a length unit (<code>meters</code>,
+<code>kilometers</code>, <code>feet</code>, <code>foot_us</code>,
+<code>miles</code>), <code>degrees</code>, or a time unit
+(<code>years</code>, <code>months</code>, <code>days</code>,
+<code>hours</code>, <code>minutes</code>, <code>seconds</code>).
+Singular forms are accepted as well, and case is ignored. A name which is
+not a known unit is rejected with an error and the map is left unchanged.
 
 <h2>SEE ALSO</h2>
 

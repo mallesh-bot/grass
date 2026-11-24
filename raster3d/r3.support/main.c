@@ -131,6 +131,10 @@ int main(int argc, char *argv[])
     if (!mapset || strcmp(mapset, G_mapset()) != 0)
         G_fatal_error(_("3D raster map <%s> not found"), infile);
 
+    /* Check the vertical unit before any metadata is written to the map. */
+    if (vunits_opt->answer && G_units(vunits_opt->answer) == U_UNKNOWN)
+        G_fatal_error(_("Unknown vertical unit <%s>"), vunits_opt->answer);
+
     if (title_opt->answer) {
         strncpy(title, title_opt->answer, MAX_TITLE_LEN);
         title[MAX_TITLE_LEN - 1] =
